@@ -22,15 +22,34 @@ func init() {
 
 // Service definition
 type Service struct {
-	Title      string               `json:"Title"`
-	Domain     string               `json:"Domain"`
-	Version    string               `json:"Version"`
-	Type       string               `json:"Type"`
-	Private    bool                 `json:"Private"`
-	Requires   []Service            `json:"Requires,omitempty"`
+
+	// Title for service.
+	Title string `json:"Title"`
+
+	// Domain of the service many times the github user or organization.
+	Domain string `json:"Domain"`
+
+	// Version of the microservice.
+	Version string `json:"Version"`
+
+	// Type is category or type of the microservice.
+	Type string `json:"Type"`
+
+	// Private is true if the Service is for internal use only.
+	Private bool `json:"Private"`
+
+	// Requires is an array of Services that are required for this Service,
+	// must contain Title, Domain, and Version.
+	Requires []Service `json:"Requires,omitempty"`
+
+	// An array of parameters to call this Service.
 	Parameters parameter.Parameters `json:"Parameters"`
-	Response   Response             `json:"Response"`
-	Method     string               `json:"Method"`
+
+	// A definition of the response for this Service.
+	Response Response `json:"Response"`
+
+	// Http method used for this Service.
+	Method string `json:"Method"`
 }
 
 // Get a new Service.
@@ -120,24 +139,24 @@ func (ps Parameters) GetParameter(key string) (*Parameter, error) {
 
 // Parameter defines a single parameter for the service to be called.
 type Parameter struct {
-	Key string
+
 	// Key: The string key representing the parameter.
+	Key string
 
-	Description string
 	// Description: A human readable description of the parameter.
+	Description string
 
-	Required bool
 	// Required: If the value is required for the API call.
+	Required bool
 
-	Type string
 	// Type: The type of parameter.  This will be used to identify the
 	// location of the parameter in the http.Request.
+	Type string
 
-	Position string
 	// Position: A string value representiing a position.  This is relative
 	// to the Type.
+	Position string
 
-	DataType string
 	// A string value that maps to a datatype for the value.
-
+	DataType string
 }
