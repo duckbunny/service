@@ -6,5 +6,9 @@
 /*
 Service is the definition of the microservice.
 
+The Service definition is used to automate bootstrap microservices,
+automate communication between separate services and to provide a human
+readable definition of a service.
+
 */
 package service

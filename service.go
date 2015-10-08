@@ -6,18 +6,18 @@
 package service
 
 import (
+	"encoding/json"
 	"flag"
 	"github.com/mongolar/service/parameter"
+	yaml "gopkg.in/yaml.v2"
 	"log"
 	"os"
 )
 
 var serviceFile string
-var DefaultService *Service
 
 func init() {
-	DefaultService = New()
-	flag.StringVar(&serviceFile, "service", "Service.yaml", "Full path to service file.")
+	flag.StringVar(&serviceFile, "service-file", "Service.yaml", "Full path to service file.")
 }
 
 // Service definition
@@ -33,44 +33,61 @@ type Service struct {
 	Method     string               `json:"Method"`
 }
 
-// Get a new Service and set the default Handler to the DefaultServerMux
+// Get a new Service.
 func New() *Service {
 	service := new(Service)
 	return service
 }
 
-// Shortcut to load Default Config Service
-func LoadConfig() {
-	DefaultService.LoadConfigFile()
-}
-
-// Load config from flag setting
-func (s *Service) LoadConfigFile() {
+// Shortcut to load Service for this application.
+func This() (*Service, error) {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
-	_, err := os.Stat(serviceFile)
+	return LoadFromFile(serviceFile)
+}
+
+// Shortcut to get new Service from yaml service definition file.
+func LoadFromFile(file) (*Service, error) {
+	s := New()
+	err := s.LoadFromFile(file)
+	return s, err
+}
+
+// Load yaml service definition file into current service.
+func (s *Service) LoadFromFile(file) error {
+	_, err := os.Stat(file)
 	if err == nil {
-		filename := len(file) - len(".yaml")
-		v := viper.New()
-		v.SetConfigName(file[0:filename])
-		err := v.ReadInConfig()
+		filebytes, err = ioutil.ReadFile(file)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
-		err = v.Marshal(s)
+		err = yaml.Unmarshal(filebytes, s)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		return
 	}
-	log.Fatal(err)
+	return err
 }
 
+// Shortcut to new Service from json bytes service definition
+func LoadFromJSON(json []byte) (*Service, error) {
+	s := New()
+	err := s.LoadFromJSON(j)
+	return s, err
+}
+
+// Load json service definition into current Service
+func (s *Service) LoadFromJSON(json []byte) error {
+	return json.UnMarshal(json, s)
+}
+
+// Represents a slice of parameters
 type Parameters []Parameter
 
-// Return all required parameters.
-func (ps Parameters) GetRequired() []string {
+// Return a slice required parameter keys.
+func (ps Parameters) RequiredKeys() []string {
 	required := make([]string, 0)
 	for _, p := range ps {
 		if p.Required {
@@ -80,7 +97,19 @@ func (ps Parameters) GetRequired() []string {
 	return required
 }
 
-func (ps Parameters) Get(key string) (*Parameter, error) {
+// Return a slice required parameters.
+func (ps Parameters) Required() []Parameter {
+	required := make([]Parameter, 0)
+	for _, p := range ps {
+		if p.Required {
+			required = append(required, p)
+		}
+	}
+	return required
+}
+
+// Get Paramater by key.
+func (ps Parameters) GetParameter(key string) (*Parameter, error) {
 	for _, p := range ps {
 		if p.Key == key {
 			return &p, nil
@@ -89,31 +118,26 @@ func (ps Parameters) Get(key string) (*Parameter, error) {
 	return new(Parameter), fmt.Errorf("Parameter %v not found", key)
 }
 
-/*
-Parameter defines a single parameter for the service to be called.
-
-Title: Is a human readable title for the parameter, it will be used as a
-value key for form values.
-
-Type: The type is one of the following default types:
-        "form" = normal form post value
-        "url" = part of the url string (requires position)
-        "json" = submitted as json
-        "query" = as a query parameter in the url
-
-Additional values can be added with the AddType function.
-
-Position: is only relevant to url types, determines position in url.
-
-Required: Required value for service.
-
-
-*/
+// Parameter defines a single parameter for the service to be called.
 type Parameter struct {
-	Key         string
+	Key string
+	// Key: The string key representing the parameter.
+
 	Description string
-	Type        string
-	Required    bool
-	DataType    string
-	Position    string
+	// Description: A human readable description of the parameter.
+
+	Required bool
+	// Required: If the value is required for the API call.
+
+	Type string
+	// Type: The type of parameter.  This will be used to identify the
+	// location of the parameter in the http.Request.
+
+	Position string
+	// Position: A string value representiing a position.  This is relative
+	// to the Type.
+
+	DataType string
+	// A string value that maps to a datatype for the value.
+
 }
