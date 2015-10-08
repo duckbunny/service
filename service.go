@@ -24,32 +24,32 @@ func init() {
 type Service struct {
 
 	// Title: Title for service.
-	Title string `json:"Title"`
+	Title string `json:"title"`
 
 	// Domain: Domain of the Service many times the github user or organization.
-	Domain string `json:"Domain"`
+	Domain string `json:"domain"`
 
 	// Version: Version of the Service.
-	Version string `json:"Version"`
+	Version string `json:"version"`
 
 	// Type: Category or type of the Service.
-	Type string `json:"Type"`
+	Type string `json:"type"`
 
 	// Private: True if the Service is for internal use only.
-	Private bool `json:"Private"`
+	Private bool `json:"private"`
 
 	// Requires: An array of Services that are required for this Service,
 	// must contain Title, Domain, and Version.
-	Requires []Service `json:"Requires,omitempty"`
+	Requires []Service `json:"requires,omitempty"`
 
 	// Parameters: An array of parameters to call this Service.
-	Parameters parameter.Parameters `json:"Parameters"`
+	Parameters parameter.Parameters `json:"parameters,omitempty"`
 
 	// Response: A definition of the response structure for this Service.
-	Response Response `json:"Response"`
+	Response Response `json:"response"`
 
 	// Method: Http method used for this Service.
-	Method string `json:"Method"`
+	Method string `json:"method"`
 }
 
 // Get a new Service.
@@ -141,22 +141,34 @@ func (ps Parameters) GetParameter(key string) (*Parameter, error) {
 type Parameter struct {
 
 	// Key: The string key representing the parameter.
-	Key string
+	Key string `json:"key"`
 
 	// Description: A human readable description of the parameter.
-	Description string
+	Description string `json:"description"`
 
 	// Required: If the value is required for the API call.
-	Required bool
+	Required bool `json:"required,omitempty"`
 
 	// Type: The type of parameter.  This will be used to identify the
 	// location of the parameter in the http.Request.
-	Type string
+	Type string `json:"type"`
 
 	// Position: A string value representiing a position.  This is relative
 	// to the Type.
-	Position string
+	Position string `json:"position,omitempty"`
 
-	// A string value that maps to a datatype for the value.
-	DataType string
+	// DataType: A string value that is the key in a map of DataTypes.
+	DataType string `json:"dataType"`
+}
+
+// Response defines the nature of the response to be returned from this response.
+type Response struct {
+	// Type is a string identifying the structural definition of the response.
+	// The string will reference a value in a map of structural definitions.
+	// This is formatting for the response as a whole.
+	// An example would be http://github.com/jasonrichardsmith/googlejson
+	Type string `json:"type"`
+
+	// DataType: A string value that is the key in a map of DataTypes.
+	DataType string `json:"dataType"`
 }
