@@ -23,32 +23,32 @@ func init() {
 // Service definition
 type Service struct {
 
-	// Title for service.
+	// Title: Title for service.
 	Title string `json:"Title"`
 
-	// Domain of the service many times the github user or organization.
+	// Domain: Domain of the Service many times the github user or organization.
 	Domain string `json:"Domain"`
 
-	// Version of the microservice.
+	// Version: Version of the Service.
 	Version string `json:"Version"`
 
-	// Type is category or type of the microservice.
+	// Type: Category or type of the Service.
 	Type string `json:"Type"`
 
-	// Private is true if the Service is for internal use only.
+	// Private: True if the Service is for internal use only.
 	Private bool `json:"Private"`
 
-	// Requires is an array of Services that are required for this Service,
+	// Requires: An array of Services that are required for this Service,
 	// must contain Title, Domain, and Version.
 	Requires []Service `json:"Requires,omitempty"`
 
-	// An array of parameters to call this Service.
+	// Parameters: An array of parameters to call this Service.
 	Parameters parameter.Parameters `json:"Parameters"`
 
-	// A definition of the response for this Service.
+	// Response: A definition of the response structure for this Service.
 	Response Response `json:"Response"`
 
-	// Http method used for this Service.
+	// Method: Http method used for this Service.
 	Method string `json:"Method"`
 }
 
