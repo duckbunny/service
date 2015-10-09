@@ -8,9 +8,9 @@ package service
 import (
 	"encoding/json"
 	"flag"
-	"github.com/mongolar/service/parameter"
+	"fmt"
 	yaml "gopkg.in/yaml.v2"
-	"log"
+	"io/ioutil"
 	"os"
 )
 
@@ -43,7 +43,7 @@ type Service struct {
 	Requires []Service `json:"requires,omitempty"`
 
 	// Parameters: An array of parameters to call this Service.
-	Parameters parameter.Parameters `json:"parameters,omitempty"`
+	Parameters Parameters `json:"parameters,omitempty"`
 
 	// Response: A definition of the response structure for this Service.
 	Response Response `json:"response"`
@@ -67,17 +67,17 @@ func This() (*Service, error) {
 }
 
 // Shortcut to get new Service from yaml service definition file.
-func LoadFromFile(file) (*Service, error) {
+func LoadFromFile(file string) (*Service, error) {
 	s := New()
 	err := s.LoadFromFile(file)
 	return s, err
 }
 
 // Load yaml service definition file into current service.
-func (s *Service) LoadFromFile(file) error {
+func (s *Service) LoadFromFile(file string) error {
 	_, err := os.Stat(file)
 	if err == nil {
-		filebytes, err = ioutil.ReadFile(file)
+		filebytes, err := ioutil.ReadFile(file)
 		if err != nil {
 			return err
 		}
@@ -85,21 +85,21 @@ func (s *Service) LoadFromFile(file) error {
 		if err != nil {
 			return err
 		}
-		return
+		return nil
 	}
 	return err
 }
 
 // Shortcut to new Service from json bytes service definition
-func LoadFromJSON(json []byte) (*Service, error) {
+func LoadFromJSON(js []byte) (*Service, error) {
 	s := New()
-	err := s.LoadFromJSON(j)
+	err := s.LoadFromJSON(js)
 	return s, err
 }
 
 // Load json service definition into current Service
-func (s *Service) LoadFromJSON(json []byte) error {
-	return json.UnMarshal(json, s)
+func (s *Service) LoadFromJSON(js []byte) error {
+	return json.Unmarshal(js, s)
 }
 
 // Represents a slice of parameters

@@ -1,4 +1,31 @@
-Title: "Example"
+Title: "service"
+Domain: "duckbunny"
 Version: "0.1"
-Type:  "http"
-Private: true
+Type:  "test"
+Private: false
+Method: "POST"
+Requires: 
+        - 
+                Title: "service2"
+                Domain: "duckbunny"
+                Version: "0.1"
+        - 
+                Title: "service3"
+                Domain: "duckbunny"
+                Version: "0.1"
+Parameters:
+        -
+                Key: "testparam1"
+                Description: "My first test parameter"
+                Required: false
+                Type: "json"
+                DataType: "map[string]string"
+        -
+                Key: "testparam2"
+                Description: "My first second parameter"
+                Required: true
+                Type: "header"
+                DataType: "string"
+Response:
+        Type: "googlejson"
+        DataType: "map[string]string"
