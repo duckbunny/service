@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"reflect"
 	"testing"
 )
 
@@ -55,14 +56,18 @@ func TestThis(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if s != TestStruct {
+	if !reflect.DeepEqual(s, TestStruct) {
 		t.Error("Test Failed.")
 	}
 }
 
 func TestLoadFromFile(t *testing.T) {
-	err, _ := LoadFromFile("Service.yaml")
+	s, err := LoadFromFile("Service.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}
+	if s.Title != TestStruct.Title {
+		t.Error("Test Failed.")
+	}
+
 }
