@@ -15,41 +15,52 @@ import (
 )
 
 var serviceFile string
+var servicePort string
+var serviceHost string
 
 func init() {
 	flag.StringVar(&serviceFile, "service-file", "Service.yaml", "Full path to service file.")
+	flag.StringVar(&servicePort, "service-port", "", "Port that this service will be operating on. This flag is required")
+	flag.StringVar(&serviceHost, "service-host", "",
+		"The hostname this service will be serving from. Overrides SERVICE_HOST environment variable.")
 }
 
 // Service definition
 type Service struct {
 
 	// Title: Title for service.
-	Title string `json:"title"`
+	Title string `json:"title" yaml:"Title"`
 
 	// Domain: Domain of the Service many times the github user or organization.
-	Domain string `json:"domain"`
+	Domain string `json:"domain" yaml:"Domain"`
 
 	// Version: Version of the Service.
-	Version string `json:"version"`
+	Version string `json:"version" yaml:"Version"`
 
 	// Type: Category or type of the Service.
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"Type"`
 
 	// Private: True if the Service is for internal use only.
-	Private bool `json:"private"`
+	Private bool `json:"private" yaml:"Private"`
 
 	// Requires: An array of Services that are required for this Service,
 	// must contain Title, Domain, and Version.
-	Requires []Service `json:"requires,omitempty"`
+	Requires []Service `json:"requires,omitempty" yaml:"Requires"`
 
 	// Parameters: An array of parameters to call this Service.
-	Parameters Parameters `json:"parameters,omitempty"`
+	Parameters Parameters `json:"parameters,omitempty" yaml:"Parameters"`
 
 	// Response: A definition of the response structure for this Service.
-	Response Response `json:"response"`
+	Response Response `json:"response" yaml:"Response"`
 
 	// Method: Http method used for this Service.
-	Method string `json:"method"`
+	Method string `json:"method" yaml:"Method"`
+
+	// Port: The Port this service will serve from.  Only applies to local instance.
+	Port string `json:"-" yaml:"-"`
+
+	// Host: The hostname from which this service will serve from.  Only applies to local instance.
+	Host string `json:"-" yaml:"-"`
 }
 
 // Get a new Service.
@@ -63,7 +74,16 @@ func This() (*Service, error) {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
-	return LoadFromFile(serviceFile)
+	s, err := LoadFromFile(serviceFile)
+	if err != nil {
+		return s, err
+	}
+	s.Port = servicePort
+	if serviceHost == "" {
+		serviceHost = os.Getenv("SERVICE_HOST")
+	}
+	s.Host = serviceHost
+	return s, err
 }
 
 // Shortcut to get new Service from yaml service definition file.
@@ -141,24 +161,24 @@ func (ps Parameters) GetParameter(key string) (*Parameter, error) {
 type Parameter struct {
 
 	// Key: The string key representing the parameter.
-	Key string `json:"key"`
+	Key string `json:"key" yaml:"Key"`
 
 	// Description: A human readable description of the parameter.
-	Description string `json:"description"`
+	Description string `json:"description" yaml:"Description"`
 
 	// Required: If the value is required for the API call.
-	Required bool `json:"required,omitempty"`
+	Required bool `json:"required,omitempty" yaml:"Required"`
 
 	// Type: The type of parameter.  This will be used to identify the
 	// location of the parameter in the http.Request.
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"Type"`
 
 	// Position: A string value representiing a position.  This is relative
 	// to the Type.
-	Position string `json:"position,omitempty"`
+	Position string `json:"position,omitempty" yaml:"Position"`
 
 	// DataType: A string value that is the key in a map of DataTypes.
-	DataType string `json:"dataType"`
+	DataType string `json:"dataType" yaml:"DataType"`
 }
 
 // Response defines the nature of the response to be returned from this response.
@@ -167,8 +187,8 @@ type Response struct {
 	// The string will reference a value in a map of structural definitions.
 	// This is formatting for the response as a whole.
 	// An example would be http://github.com/jasonrichardsmith/googlejson
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"Type"`
 
 	// DataType: A string value that is the key in a map of DataTypes.
-	DataType string `json:"dataType"`
+	DataType string `json:"dataType" yaml:"DataType"`
 }
