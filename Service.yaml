@@ -1,31 +1,32 @@
-Title: "service"
-Domain: "duckbunny"
+--- 
+Title: service
+Type: test
 Version: "0.1"
-Type:  "test"
+Domain: duckbunny
+Method: POST
+Parameters: 
+  - 
+    DataType: "map[string]string"
+    Description: "My first test parameter"
+    Key: testparam1
+    Required: false
+    Type: json
+  - 
+    DataType: string
+    Description: "My second test parameter"
+    Key: testparam2
+    Required: true
+    Type: header
 Private: false
-Method: "POST"
 Requires: 
-        - 
-                Title: "service2"
-                Domain: "duckbunny"
-                Version: "0.1"
-        - 
-                Title: "service3"
-                Domain: "duckbunny"
-                Version: "0.1"
-Parameters:
-        -
-                Key: "testparam1"
-                Description: "My first test parameter"
-                Required: false
-                Type: "json"
-                DataType: "map[string]string"
-        -
-                Key: "testparam2"
-                Description: "My first second parameter"
-                Required: true
-                Type: "header"
-                DataType: "string"
-Response:
-        Type: "googlejson"
-        DataType: "map[string]string"
+  - 
+    Domain: duckbunny
+    Title: service2
+    Version: "0.1"
+  - 
+    Domain: duckbunny
+    Title: service3
+    Version: "0.1"
+Response: 
+  DataType: "map[string]string"
+  Type: googlejson

@@ -1,0 +1,41 @@
+{
+	"title": "service",
+	"type": "test",
+	"version": "0.1",
+	"domain": "duckbunny",
+	"method": "POST",
+	"parameters":[
+		{
+    			"dataType": "map[string]string",
+			"description": "My first test parameter",
+			"key": "testparam1",
+			"required": false,
+			"type": "json"
+		},
+		{
+			"dataType": "string",
+			"description": "My second test parameter",
+			"key": "testparam2",
+			"required": true,
+			"type": "header"
+		}
+	],	
+	"private": false,
+	"requires": [ 
+		{
+			"domain": "duckbunny",
+			"title": "service2",
+			"version": "0.1"
+		},
+		{
+			"domain": "duckbunny",
+			"title": "service3",
+			"version": "0.1"
+		}
+	],
+	"response": {
+		"dataType": "map[string]string",
+		"type": "googlejson"
+	}
+}
+
