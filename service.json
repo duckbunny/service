@@ -1,9 +1,21 @@
 {
 	"title": "service",
-	"type": "test",
-	"version": "0.1",
 	"domain": "duckbunny",
-	"method": "POST",
+	"version": "0.1",
+	"type": "test",
+	"private": false,
+	"requires": [ 
+		{
+			"domain": "duckbunny",
+			"title": "service2",
+			"version": "0.1"
+		},
+		{
+			"domain": "duckbunny",
+			"title": "service3",
+			"version": "0.1"
+		}
+	],
 	"parameters":[
 		{
     			"dataType": "map[string]string",
@@ -20,22 +32,9 @@
 			"type": "header"
 		}
 	],	
-	"private": false,
-	"requires": [ 
-		{
-			"domain": "duckbunny",
-			"title": "service2",
-			"version": "0.1"
-		},
-		{
-			"domain": "duckbunny",
-			"title": "service3",
-			"version": "0.1"
-		}
-	],
 	"response": {
 		"dataType": "map[string]string",
 		"type": "googlejson"
-	}
+	},
+	"method": "POST"
 }
-
