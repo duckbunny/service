@@ -1,14 +1,28 @@
 package service
 
 import (
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"reflect"
 	"testing"
 )
 
 var TestStruct *Service
+var TestJSON []byte
 
 func init() {
+	var err error
+	TestJSON, err = ioutil.ReadFile("service.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	buf := new(bytes.Buffer)
+	if err := json.Compact(buf, TestJSON); err != nil {
+		log.Fatal(err)
+	}
+	TestJSON = buf.Bytes()
 	TestStruct = &Service{
 		Title:   "service",
 		Domain:  "duckbunny",
