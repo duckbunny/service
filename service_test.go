@@ -80,8 +80,42 @@ func TestLoadFromFile(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if s.Title != TestStruct.Title {
+	if !reflect.DeepEqual(s, TestStruct) {
 		t.Error("Test Failed.")
 	}
+}
 
+func TestLoadFromJSON(t *testing.T) {
+	s, err := LoadFromJSON(TestJSON)
+	if err != nil {
+		t.Error("Test Failed.")
+	}
+	if !reflect.DeepEqual(s, TestStruct) {
+		t.Error("Test Failed.")
+	}
+}
+
+func TestRequiredKeys(t *testing.T) {
+	keys := TestStruct.Parameters.RequiredKeys()
+	if keys[0] != "testparam2" {
+		t.Error("Test Failed.")
+	}
+}
+
+func TestRequired(t *testing.T) {
+	keys := TestStruct.Parameters.Required()
+	p := keys[0]
+	if p.Key != "testparam2" {
+		t.Error("Test Failed.")
+	}
+}
+
+func TestGetParameter(t *testing.T) {
+	p, err := TestStruct.Parameters.GetParameter("testparam1")
+	if err != nil {
+		t.Error("Test Failed.")
+	}
+	if p.Description != "My first test parameter" {
+		t.Error("Test Failed.")
+	}
 }
