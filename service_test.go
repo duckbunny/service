@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"reflect"
@@ -91,6 +92,13 @@ func TestLoadFromJSON(t *testing.T) {
 		t.Error("Test Failed.")
 	}
 	if !reflect.DeepEqual(s, TestStruct) {
+		t.Error("Test Failed.")
+	}
+}
+
+func TestToJSON(t *testing.T) {
+	js, err := TestStruct.ToJSON()
+	if err != nil {
 		t.Error("Test Failed.")
 	}
 }

@@ -122,6 +122,11 @@ func (s *Service) LoadFromJSON(js []byte) error {
 	return json.Unmarshal(js, s)
 }
 
+// Load json service definition into current Service
+func (s *Service) ToJSON() ([]byte, error) {
+	return json.Marshal(s)
+}
+
 // Represents a slice of parameters
 type Parameters []Parameter
 
