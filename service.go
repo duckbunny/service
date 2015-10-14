@@ -56,6 +56,9 @@ type Service struct {
 	// Method: Http method used for this Service.
 	Method string `json:"method" yaml:"Method"`
 
+	// Parameters: An array of parameters to call this Service.
+	Flags Flags `json:"flags,omitempty" yaml:"Flags"`
+
 	// Port: The Port this service will serve from.  Only applies to local instance.
 	Port string `json:"-" yaml:"-"`
 
@@ -132,7 +135,7 @@ type Parameters []Parameter
 
 // Return a slice required parameter keys.
 func (ps Parameters) RequiredKeys() []string {
-	required := make([]string, 0)
+	var required []string
 	for _, p := range ps {
 		if p.Required {
 			required = append(required, p.Key)
@@ -143,7 +146,7 @@ func (ps Parameters) RequiredKeys() []string {
 
 // Return a slice required parameters.
 func (ps Parameters) Required() []Parameter {
-	required := make([]Parameter, 0)
+	var required []Parameter
 	for _, p := range ps {
 		if p.Required {
 			required = append(required, p)
@@ -153,13 +156,13 @@ func (ps Parameters) Required() []Parameter {
 }
 
 // Get Paramater by key.
-func (ps Parameters) GetParameter(key string) (*Parameter, error) {
+func (ps Parameters) GetParameter(key string) (Parameter, error) {
 	for _, p := range ps {
 		if p.Key == key {
-			return &p, nil
+			return p, nil
 		}
 	}
-	return new(Parameter), fmt.Errorf("Parameter %v not found", key)
+	return Parameter{}, fmt.Errorf("Parameter %v not found", key)
 }
 
 // Parameter defines a single parameter for the service to be called.
@@ -196,4 +199,55 @@ type Response struct {
 
 	// DataType: A string value that is the key in a map of DataTypes.
 	DataType string `json:"dataType" yaml:"DataType"`
+}
+
+// Represents a slice of Flags.
+type Flags []Flag
+
+// Return a slice required flag keys.
+func (fs Flags) RequiredKeys() []string {
+	var required []string
+	for _, f := range fs {
+		if f.Required {
+			required = append(required, f.Key)
+		}
+	}
+	return required
+}
+
+// Return a slice required flags.
+func (fs Flags) Required() []Flag {
+	var required []Flag
+	for _, f := range fs {
+		if f.Required {
+			required = append(required, f)
+		}
+	}
+	return required
+}
+
+// Get Flag by key.
+func (fs Flags) GetFlag(key string) (Flag, error) {
+	for _, f := range fs {
+		if f.Key == key {
+			return f, nil
+		}
+	}
+	return Flag{}, fmt.Errorf("Flag %v not found", key)
+}
+
+// Represents a sincle command line flag.
+type Flag struct {
+	// The flag designation for the command line flag.
+	Key string `json:"key" yaml:"Key"`
+
+	// An environment variable that can bes set in lieu of the flag.
+	// CLI flag always overrides environment variable.
+	Env string `json:"env" yaml:"Env"`
+
+	// Human readable description of the flag.
+	Description string `json:"description" yaml:"Description"`
+
+	// Defines flas as required.
+	Required bool `json:"required" yaml:"Required"`
 }
