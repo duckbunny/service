@@ -30,3 +30,9 @@ Requires:
 Response: 
   DataType: "map[string]string"
   Type: googlejson
+Flags: 
+  - 
+    Key: "test"
+    Env: "TESTVAR"
+    Description: "This is a test flag."
+    Required: true

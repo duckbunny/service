@@ -62,6 +62,14 @@ func init() {
 			Type:     "googlejson",
 			DataType: "map[string]string",
 		},
+		Flags: []Flag{
+			Flag{
+				Key:         "test",
+				Env:         "TESTVAR",
+				Description: "This is a test flag.",
+				Required:    true,
+			},
+		},
 	}
 }
 

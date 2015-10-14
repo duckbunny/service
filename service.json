@@ -31,7 +31,15 @@
 			"required": true,
 			"type": "header"
 		}
-	],	
+	],
+	"flags":[
+		{
+			"key": "test",
+			"env": "TESTVAR",
+			"description": "This is a test flag.",
+			"required": true
+		}
+	],
 	"response": {
 		"dataType": "map[string]string",
 		"type": "googlejson"
