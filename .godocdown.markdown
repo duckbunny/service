@@ -1,0 +1,14 @@
+###Service
+
+Is the basic template to define microservices in json and yaml format.
+
+[![GoDoc](https://godoc.org/github.com/duckbunny/{{ .Name }}?status.svg)](https://godoc.org/github.com/duckbunny/{{ .Name }})
+
+
+{{ .EmitHeader }}
+
+{{ .EmitSynopsis }}
+
+
+{{ .EmitUsage }}
+
