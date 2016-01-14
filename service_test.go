@@ -24,12 +24,13 @@ func init() {
 	}
 	TestJSON = buf.Bytes()
 	TestStruct = &Service{
-		Title:   "service",
-		Domain:  "duckbunny",
-		Version: "0.1",
-		Type:    "test",
-		Private: false,
-		Method:  "POST",
+		Title:    "service",
+		Domain:   "duckbunny",
+		Version:  "0.1",
+		Type:     "test",
+		Protocol: "http",
+		Private:  false,
+		Method:   "POST",
 		Requires: []Service{
 			Service{
 				Title:   "service2",
