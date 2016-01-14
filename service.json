@@ -3,6 +3,7 @@
 	"domain": "duckbunny",
 	"version": "0.1",
 	"type": "test",
+	"protocol": "http",
 	"private": false,
 	"requires": [ 
 		{

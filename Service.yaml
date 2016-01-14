@@ -1,6 +1,7 @@
 --- 
 Title: service
 Type: test
+Protocol: http
 Version: "0.1"
 Domain: duckbunny
 Method: POST

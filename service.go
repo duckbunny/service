@@ -9,9 +9,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	yaml "gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 var serviceFile string
@@ -39,6 +40,9 @@ type Service struct {
 
 	// Type: Category or type of the Service.
 	Type string `json:"type" yaml:"Type"`
+
+	// Type: Protocol of the service.
+	Protocol string `json:"protocol" yaml:"Protocol"`
 
 	// Private: True if the Service is for internal use only.
 	Private bool `json:"private" yaml:"Private"`

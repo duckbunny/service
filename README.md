@@ -160,6 +160,9 @@ type Service struct {
 	// Type: Category or type of the Service.
 	Type string `json:"type" yaml:"Type"`
 
+	// Type: Protocol of the service.
+	Protocol string `json:"protocol" yaml:"Protocol"`
+
 	// Private: True if the Service is for internal use only.
 	Private bool `json:"private" yaml:"Private"`
 
