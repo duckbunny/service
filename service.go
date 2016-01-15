@@ -22,7 +22,7 @@ var serviceHost string
 func init() {
 	flag.StringVar(&serviceFile, "service-file", "Service.yaml", "Full path to service file.")
 	flag.StringVar(&servicePort, "service-port", "", "Port that this service will be operating on. This flag is required")
-	flag.StringVar(&serviceHost, "service-host", "",
+	flag.StringVar(&serviceHost, "service-host", os.Getenv("SERVICE_HOST"),
 		"The hostname this service will be serving from. Overrides SERVICE_HOST environment variable.")
 }
 
@@ -86,9 +86,6 @@ func This() (*Service, error) {
 		return s, err
 	}
 	s.Port = servicePort
-	if serviceHost == "" {
-		serviceHost = os.Getenv("SERVICE_HOST")
-	}
 	s.Host = serviceHost
 	return s, err
 }
