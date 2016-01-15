@@ -7,6 +7,7 @@ package service
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -86,6 +87,9 @@ func This() (*Service, error) {
 		return s, err
 	}
 	s.Port = servicePort
+	if s.Port == "" {
+		return s, errors.New("No port set")
+	}
 	s.Host = serviceHost
 	return s, err
 }
