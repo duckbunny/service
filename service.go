@@ -91,6 +91,9 @@ func This() (*Service, error) {
 		return s, errors.New("No port set")
 	}
 	s.Host = serviceHost
+	if s.Host == "" {
+		return s, errors.New("No host set")
+	}
 	return s, err
 }
 
