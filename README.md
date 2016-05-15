@@ -3,8 +3,8 @@
 Is the basic template to define microservices in json and yaml format.
 
 [![GoDoc](https://godoc.org/github.com/duckbunny/service?status.svg)](https://godoc.org/github.com/duckbunny/service)
-
-
+[![Build Status](https://travis-ci.org/duckbunny/service.svg?branch=master)](https://travis-ci.org/duckbunny/service)
+[![Coverage Status](https://coveralls.io/repos/github/duckbunny/service/badge.svg?branch=githubtesting)](https://coveralls.io/github/duckbunny/service?branch=githubtesting)
 # service
 --
     import "github.com/duckbunny/service"
@@ -17,6 +17,29 @@ definition of a service.
 
 
 ## Usage
+
+#### type Config
+
+```go
+type Config struct {
+	// Key name for variable
+	Key string `json:"key" yaml:"Key"`
+	// Required configuration variable
+	Required bool `json:"required,omitempty" yaml:"Required"`
+	// Description: A human readable description of the parameter.
+	Description string `json:"description" yaml:"Description"`
+}
+```
+
+Config represents one configuration value
+
+#### type Configs
+
+```go
+type Configs []Config
+```
+
+Configs represents a slice of configs
 
 #### type Flag
 
@@ -172,6 +195,9 @@ type Service struct {
 
 	// Parameters: An array of parameters to call this Service.
 	Parameters Parameters `json:"parameters,omitempty" yaml:"Parameters"`
+
+	// Configs: An array of configurations this service can use.
+	Configs Configs `json:"configs,omitempty" yaml:"Configs"`
 
 	// Response: A definition of the response structure for this Service.
 	Response Response `json:"response" yaml:"Response"`

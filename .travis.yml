@@ -1,7 +1,5 @@
 language: go
 go: 1.6
-install:
-    - go get -v code.google.com/p/go.tools/cmd/cover
 script:
     - go test -v 
     - go test -v -covermode=count -coverprofile=profile.cov

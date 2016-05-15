@@ -3,8 +3,8 @@
 Is the basic template to define microservices in json and yaml format.
 
 [![GoDoc](https://godoc.org/github.com/duckbunny/{{ .Name }}?status.svg)](https://godoc.org/github.com/duckbunny/{{ .Name }})
-
-
+[![Build Status](https://travis-ci.org/duckbunny/service.svg?branch=master)](https://travis-ci.org/duckbunny/service)
+[![Coverage Status](https://coveralls.io/repos/github/duckbunny/service/badge.svg?branch=githubtesting)](https://coveralls.io/github/duckbunny/service?branch=githubtesting)
 {{ .EmitHeader }}
 
 {{ .EmitSynopsis }}
