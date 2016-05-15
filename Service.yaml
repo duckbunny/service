@@ -18,6 +18,15 @@ Parameters:
     Key: testparam2
     Required: true
     Type: header
+Configs: 
+  - 
+    Key: testconfig1
+    Description: "My first test config"
+    Required: false
+  - 
+    Key: testconfig2
+    Description: "My second test config"
+    Required: true
 Private: false
 Requires: 
   - 

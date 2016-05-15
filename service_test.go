@@ -13,6 +13,8 @@ var TestStruct *Service
 var TestJSON []byte
 
 func init() {
+	servicePort = "80"
+	serviceHost = "localhost"
 	var err error
 	TestJSON, err = ioutil.ReadFile("service.json")
 	if err != nil {
@@ -59,6 +61,18 @@ func init() {
 				DataType:    "string",
 			},
 		},
+		Configs: []Config{
+			Config{
+				Key:         "testconfig1",
+				Description: "My first test config",
+				Required:    false,
+			},
+			Config{
+				Key:         "testconfig2",
+				Description: "My second test config",
+				Required:    true,
+			},
+		},
 		Response: Response{
 			Type:     "googlejson",
 			DataType: "map[string]string",
@@ -71,6 +85,8 @@ func init() {
 				Required:    true,
 			},
 		},
+		Port: "80",
+		Host: "localhost",
 	}
 }
 
@@ -85,6 +101,8 @@ func TestThis(t *testing.T) {
 }
 
 func TestLoadFromFile(t *testing.T) {
+	TestStruct.Host = ""
+	TestStruct.Port = ""
 	s, err := LoadFromFile("Service.yaml")
 	if err != nil {
 		log.Fatal(err)

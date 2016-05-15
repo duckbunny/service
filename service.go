@@ -55,6 +55,9 @@ type Service struct {
 	// Parameters: An array of parameters to call this Service.
 	Parameters Parameters `json:"parameters,omitempty" yaml:"Parameters"`
 
+	// Configs: An array of configurations this service can use.
+	Configs Configs `json:"configs,omitempty" yaml:"Configs"`
+
 	// Response: A definition of the response structure for this Service.
 	Response Response `json:"response" yaml:"Response"`
 
@@ -195,6 +198,19 @@ type Parameter struct {
 
 	// DataType: A string value that is the key in a map of DataTypes.
 	DataType string `json:"dataType" yaml:"DataType"`
+}
+
+// Configs represents a slice of configs
+type Configs []Config
+
+// Config represents one configuration value
+type Config struct {
+	// Key name for variable
+	Key string `json:"key" yaml:"Key"`
+	// Required configuration variable
+	Required bool `json:"required,omitempty" yaml:"Required"`
+	// Description: A human readable description of the parameter.
+	Description string `json:"description" yaml:"Description"`
 }
 
 // Response defines the nature of the response to be returned from this response.

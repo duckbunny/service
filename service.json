@@ -33,6 +33,18 @@
 			"type": "header"
 		}
 	],
+	"configs":[
+		{
+			"description": "My first test config",
+			"key": "testconfig1",
+			"required": false
+		},
+		{
+			"description": "My second test config",
+			"key": "testconfig2",
+			"required": true
+		}
+	],
 	"flags":[
 		{
 			"key": "test",
