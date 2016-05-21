@@ -13,8 +13,6 @@ var TestStruct *Service
 var TestJSON []byte
 
 func init() {
-	servicePort = "80"
-	serviceHost = "localhost"
 	var err error
 	TestJSON, err = ioutil.ReadFile("service.json")
 	if err != nil {
@@ -91,21 +89,43 @@ func init() {
 }
 
 func TestThis(t *testing.T) {
-	s, err := This()
-	if err != nil {
-		log.Fatal(err)
+	serviceFile = "fakefile.yaml"
+	_, err := This()
+	if err == nil {
+		t.Error("Expected file load error")
 	}
+	serviceFile = "Service.yaml"
+	_, err = This()
+	if err != ErrNoPort {
+		t.Error("Expected no port error")
+	}
+	servicePort = "80"
+	_, err = This()
+	if err != ErrNoHost {
+		t.Error("Expected no host error")
+	}
+	serviceHost = "localhost"
+	var s *Service
+	s, err = This()
+	if err != nil {
+		t.Error(err)
+	}
+
 	if !reflect.DeepEqual(s, TestStruct) {
 		t.Error("Test Failed.")
 	}
 }
 
 func TestLoadFromFile(t *testing.T) {
+	_, err := LoadFromFile("fakefile.yaml")
+	if err == nil {
+		t.Error("Expected file load error")
+	}
 	TestStruct.Host = ""
 	TestStruct.Port = ""
 	s, err := LoadFromFile("Service.yaml")
 	if err != nil {
-		log.Fatal(err)
+		t.Error(err)
 	}
 	if !reflect.DeepEqual(s, TestStruct) {
 		t.Error("Test Failed.")
@@ -134,6 +154,10 @@ func TestRequiredKeys(t *testing.T) {
 	if keys[0] != "testparam2" {
 		t.Error("Test Failed.")
 	}
+	keys = TestStruct.Flags.RequiredKeys()
+	if keys[0] != "test" {
+		t.Error("Test Failed.")
+	}
 }
 
 func TestRequired(t *testing.T) {
@@ -142,14 +166,37 @@ func TestRequired(t *testing.T) {
 	if p.Key != "testparam2" {
 		t.Error("Test Failed.")
 	}
+	flags := TestStruct.Flags.Required()
+	f := flags[0]
+	if f.Key != "test" {
+		t.Error("Test Failed.")
+	}
 }
 
 func TestGetParameter(t *testing.T) {
-	p, err := TestStruct.Parameters.GetParameter("testparam1")
+	p, err := TestStruct.Parameters.GetParameter("testparamfake")
+	if err == nil {
+		t.Error("Expected missing parameter.")
+	}
+	p, err = TestStruct.Parameters.GetParameter("testparam1")
 	if err != nil {
 		t.Error("Test Failed.")
 	}
 	if p.Description != "My first test parameter" {
+		t.Error("Test Failed.")
+	}
+}
+
+func TestGetFlag(t *testing.T) {
+	p, err := TestStruct.Flags.GetFlag("testflagfake")
+	if err == nil {
+		t.Error("Expected missing flag.")
+	}
+	p, err = TestStruct.Flags.GetFlag("test")
+	if err != nil {
+		t.Error("Test Failed.")
+	}
+	if p.Description != "This is a test flag." {
 		t.Error("Test Failed.")
 	}
 }
