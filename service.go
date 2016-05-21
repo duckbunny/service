@@ -23,7 +23,9 @@ var (
 )
 
 var (
+	//ErrNoPort when no port has been set for service
 	ErrNoPort = errors.New("No port set")
+	//ErrNoHost when no host has been set for service
 	ErrNoHost = errors.New("No host set")
 )
 
@@ -81,13 +83,13 @@ type Service struct {
 	Host string `json:"-" yaml:"-"`
 }
 
-// Get a new Service.
+// New get a new Service.
 func New() *Service {
 	service := new(Service)
 	return service
 }
 
-// Shortcut to load Service for this application.
+// This shortcuts to load Service for this application.
 func This() (*Service, error) {
 	if !flag.Parsed() {
 		flag.Parse()
@@ -107,14 +109,14 @@ func This() (*Service, error) {
 	return s, err
 }
 
-// Shortcut to get new Service from yaml service definition file.
+// LoadFromFile gets a new Service from yaml service definition file.
 func LoadFromFile(file string) (*Service, error) {
 	s := New()
 	err := s.LoadFromFile(file)
 	return s, err
 }
 
-// Load yaml service definition file into current service.
+// LoadFromFile loads yaml service definition file into current service.
 func (s *Service) LoadFromFile(file string) error {
 	_, err := os.Stat(file)
 	if err == nil {
@@ -131,27 +133,27 @@ func (s *Service) LoadFromFile(file string) error {
 	return err
 }
 
-// Shortcut to new Service from json bytes service definition
+// LoadFromJSON loads to new Service from json bytes service definition
 func LoadFromJSON(js []byte) (*Service, error) {
 	s := New()
 	err := s.LoadFromJSON(js)
 	return s, err
 }
 
-// Load json service definition into current Service
+// LoadFromJSON loads service definition into current Service
 func (s *Service) LoadFromJSON(js []byte) error {
 	return json.Unmarshal(js, s)
 }
 
-// Load json service definition into current Service
+// ToJSON converst current service to json
 func (s *Service) ToJSON() ([]byte, error) {
 	return json.Marshal(s)
 }
 
-// Represents a slice of parameters
+// Parameters represents a slice of parameters
 type Parameters []Parameter
 
-// Return a slice required parameter keys.
+// RequiredKeys returns a slice of required parameter keys.
 func (ps Parameters) RequiredKeys() []string {
 	var required []string
 	for _, p := range ps {
@@ -162,7 +164,7 @@ func (ps Parameters) RequiredKeys() []string {
 	return required
 }
 
-// Return a slice required parameters.
+// Required returns a slice required parameters.
 func (ps Parameters) Required() []Parameter {
 	var required []Parameter
 	for _, p := range ps {
@@ -173,7 +175,7 @@ func (ps Parameters) Required() []Parameter {
 	return required
 }
 
-// Get Paramater by key.
+// GetParameter by key.
 func (ps Parameters) GetParameter(key string) (Parameter, error) {
 	for _, p := range ps {
 		if p.Key == key {
@@ -232,10 +234,10 @@ type Response struct {
 	DataType string `json:"dataType" yaml:"DataType"`
 }
 
-// Represents a slice of Flags.
+// Flags represents a slice of Flags.
 type Flags []Flag
 
-// Return a slice required flag keys.
+// RequiredKeys returns a slice required flag keys.
 func (fs Flags) RequiredKeys() []string {
 	var required []string
 	for _, f := range fs {
@@ -246,7 +248,7 @@ func (fs Flags) RequiredKeys() []string {
 	return required
 }
 
-// Return a slice required flags.
+// Required returns a slice required flags.
 func (fs Flags) Required() []Flag {
 	var required []Flag
 	for _, f := range fs {
@@ -257,7 +259,7 @@ func (fs Flags) Required() []Flag {
 	return required
 }
 
-// Get Flag by key.
+// GetFlag by key.
 func (fs Flags) GetFlag(key string) (Flag, error) {
 	for _, f := range fs {
 		if f.Key == key {
@@ -267,18 +269,18 @@ func (fs Flags) GetFlag(key string) (Flag, error) {
 	return Flag{}, fmt.Errorf("Flag %v not found", key)
 }
 
-// Represents a sincle command line flag.
+// Flag represents a single command line flag.
 type Flag struct {
-	// The flag designation for the command line flag.
+	// Key is the flag designation for the command line flag.
 	Key string `json:"key" yaml:"Key"`
 
-	// An environment variable that can bes set in lieu of the flag.
+	// Env is an environment variable that can bes set in lieu of the flag.
 	// CLI flag always overrides environment variable.
 	Env string `json:"env" yaml:"Env"`
 
-	// Human readable description of the flag.
+	// Description is the human readable description of the flag.
 	Description string `json:"description" yaml:"Description"`
 
-	// Defines flas as required.
+	// Required defines flag as required.
 	Required bool `json:"required" yaml:"Required"`
 }

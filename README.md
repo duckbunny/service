@@ -9,7 +9,7 @@ Is the basic template to define microservices in json and yaml format.
 --
     import "github.com/duckbunny/service"
 
-Service is the definition of the microservice.
+Package service is the definition of the microservice.
 
 The Service definition is used to automate bootstrap microservices, automate
 communication between separate services and to provide a human readable
@@ -17,6 +17,15 @@ definition of a service.
 
 
 ## Usage
+
+```go
+var (
+	//ErrNoPort when no port has been set for service
+	ErrNoPort = errors.New("No port set")
+	//ErrNoHost when no host has been set for service
+	ErrNoHost = errors.New("No host set")
+)
+```
 
 #### type Config
 
@@ -45,22 +54,22 @@ Configs represents a slice of configs
 
 ```go
 type Flag struct {
-	// The flag designation for the command line flag.
+	// Key is the flag designation for the command line flag.
 	Key string `json:"key" yaml:"Key"`
 
-	// An environment variable that can bes set in lieu of the flag.
+	// Env is an environment variable that can bes set in lieu of the flag.
 	// CLI flag always overrides environment variable.
 	Env string `json:"env" yaml:"Env"`
 
-	// Human readable description of the flag.
+	// Description is the human readable description of the flag.
 	Description string `json:"description" yaml:"Description"`
 
-	// Defines flas as required.
+	// Required defines flag as required.
 	Required bool `json:"required" yaml:"Required"`
 }
 ```
 
-Represents a sincle command line flag.
+Flag represents a single command line flag.
 
 #### type Flags
 
@@ -68,28 +77,28 @@ Represents a sincle command line flag.
 type Flags []Flag
 ```
 
-Represents a slice of Flags.
+Flags represents a slice of Flags.
 
 #### func (Flags) GetFlag
 
 ```go
 func (fs Flags) GetFlag(key string) (Flag, error)
 ```
-Get Flag by key.
+GetFlag by key.
 
 #### func (Flags) Required
 
 ```go
 func (fs Flags) Required() []Flag
 ```
-Return a slice required flags.
+Required returns a slice required flags.
 
 #### func (Flags) RequiredKeys
 
 ```go
 func (fs Flags) RequiredKeys() []string
 ```
-Return a slice required flag keys.
+RequiredKeys returns a slice required flag keys.
 
 #### type Parameter
 
@@ -126,28 +135,28 @@ Parameter defines a single parameter for the service to be called.
 type Parameters []Parameter
 ```
 
-Represents a slice of parameters
+Parameters represents a slice of parameters
 
 #### func (Parameters) GetParameter
 
 ```go
 func (ps Parameters) GetParameter(key string) (Parameter, error)
 ```
-Get Paramater by key.
+GetParameter by key.
 
 #### func (Parameters) Required
 
 ```go
 func (ps Parameters) Required() []Parameter
 ```
-Return a slice required parameters.
+Required returns a slice required parameters.
 
 #### func (Parameters) RequiredKeys
 
 ```go
 func (ps Parameters) RequiredKeys() []string
 ```
-Return a slice required parameter keys.
+RequiredKeys returns a slice of required parameter keys.
 
 #### type Response
 
@@ -223,46 +232,46 @@ Service definition
 ```go
 func LoadFromFile(file string) (*Service, error)
 ```
-Shortcut to get new Service from yaml service definition file.
+LoadFromFile gets a new Service from yaml service definition file.
 
 #### func  LoadFromJSON
 
 ```go
 func LoadFromJSON(js []byte) (*Service, error)
 ```
-Shortcut to new Service from json bytes service definition
+LoadFromJSON loads to new Service from json bytes service definition
 
 #### func  New
 
 ```go
 func New() *Service
 ```
-Get a new Service.
+New get a new Service.
 
 #### func  This
 
 ```go
 func This() (*Service, error)
 ```
-Shortcut to load Service for this application.
+This shortcuts to load Service for this application.
 
 #### func (*Service) LoadFromFile
 
 ```go
 func (s *Service) LoadFromFile(file string) error
 ```
-Load yaml service definition file into current service.
+LoadFromFile loads yaml service definition file into current service.
 
 #### func (*Service) LoadFromJSON
 
 ```go
 func (s *Service) LoadFromJSON(js []byte) error
 ```
-Load json service definition into current Service
+LoadFromJSON loads service definition into current Service
 
 #### func (*Service) ToJSON
 
 ```go
 func (s *Service) ToJSON() ([]byte, error)
 ```
-Load json service definition into current Service
+ToJSON converst current service to json
