@@ -16,9 +16,16 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-var serviceFile string
-var servicePort string
-var serviceHost string
+var (
+	serviceFile string
+	servicePort string
+	serviceHost string
+)
+
+var (
+	ErrNoPort = errors.New("No port set")
+	ErrNoHost = errors.New("No host set")
+)
 
 func init() {
 	flag.StringVar(&serviceFile, "service-file", "Service.yaml", "Full path to service file.")
@@ -91,11 +98,11 @@ func This() (*Service, error) {
 	}
 	s.Port = servicePort
 	if s.Port == "" {
-		return s, errors.New("No port set")
+		return s, ErrNoPort
 	}
 	s.Host = serviceHost
 	if s.Host == "" {
-		return s, errors.New("No host set")
+		return s, ErrNoHost
 	}
 	return s, err
 }
