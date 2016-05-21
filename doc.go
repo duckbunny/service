@@ -4,7 +4,7 @@
 // license that can be found in the LICENSE file.
 
 /*
-Service is the definition of the microservice.
+Package service is the definition of the microservice.
 
 The Service definition is used to automate bootstrap microservices,
 automate communication between separate services and to provide a human
