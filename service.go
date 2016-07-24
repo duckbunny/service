@@ -218,7 +218,7 @@ type Config struct {
 	Key string `json:"key" yaml:"Key"`
 	// Required configuration variable
 	Required bool `json:"required,omitempty" yaml:"Required"`
-	// Description: A human readable description of the parameter.
+	// Description: A human readable description of the value.
 	Description string `json:"description" yaml:"Description"`
 }
 
