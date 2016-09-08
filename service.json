@@ -5,6 +5,15 @@
 	"type": "test",
 	"protocol": "http",
 	"private": false,
+	"apiDefinition":{
+		"type": "swagger",
+		"locationType": "vcs",
+		"vcs": {
+			"type": "git",
+			"location": "https://github.com/duckbunny/service.git",
+			"file":"definition.json"
+		}
+	},
 	"requires": [ 
 		{
 			"domain": "duckbunny",
@@ -15,22 +24,6 @@
 			"domain": "duckbunny",
 			"title": "service3",
 			"version": "0.1"
-		}
-	],
-	"parameters":[
-		{
-    			"dataType": "map[string]string",
-			"description": "My first test parameter",
-			"key": "testparam1",
-			"required": false,
-			"type": "json"
-		},
-		{
-			"dataType": "string",
-			"description": "My second test parameter",
-			"key": "testparam2",
-			"required": true,
-			"type": "header"
 		}
 	],
 	"configs":[
@@ -52,10 +45,5 @@
 			"description": "This is a test flag.",
 			"required": true
 		}
-	],
-	"response": {
-		"dataType": "map[string]string",
-		"type": "googlejson"
-	},
-	"method": "POST"
+	]
 }

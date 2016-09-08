@@ -51,8 +51,11 @@ type Service struct {
 	// Type: Category or type of the Service.
 	Type string `json:"type" yaml:"Type"`
 
-	// Type: Protocol of the service.
+	// Protocol: Protocol of the service.
 	Protocol string `json:"protocol" yaml:"Protocol"`
+
+	// APIDefinition: APIDefinition of the service.
+	APIDefinition `json:"apiDefinition" yaml:"APIDefinition"`
 
 	// Private: True if the Service is for internal use only.
 	Private bool `json:"private" yaml:"Private"`
@@ -61,20 +64,11 @@ type Service struct {
 	// must contain Title, Domain, and Version.
 	Requires []Service `json:"requires,omitempty" yaml:"Requires"`
 
-	// Parameters: An array of parameters to call this Service.
-	Parameters Parameters `json:"parameters,omitempty" yaml:"Parameters"`
-
 	// Configs: An array of configurations this service can use.
-	Configs Configs `json:"configs,omitempty" yaml:"Configs"`
-
-	// Response: A definition of the response structure for this Service.
-	Response Response `json:"response" yaml:"Response"`
-
-	// Method: Http method used for this Service.
-	Method string `json:"method" yaml:"Method"`
+	Configs `json:"configs,omitempty" yaml:"Configs"`
 
 	// Parameters: An array of parameters to call this Service.
-	Flags Flags `json:"flags,omitempty" yaml:"Flags"`
+	Flags `json:"flags,omitempty" yaml:"Flags"`
 
 	// Port: The Port this service will serve from.  Only applies to local instance.
 	Port string `json:"-" yaml:"-"`
@@ -150,63 +144,26 @@ func (s *Service) ToJSON() ([]byte, error) {
 	return json.Marshal(s)
 }
 
-// Parameters represents a slice of parameters
-type Parameters []Parameter
-
-// RequiredKeys returns a slice of required parameter keys.
-func (ps Parameters) RequiredKeys() []string {
-	var required []string
-	for _, p := range ps {
-		if p.Required {
-			required = append(required, p.Key)
-		}
-	}
-	return required
+// APIDefinition Defines how to access the API
+type APIDefinition struct {
+	// Type represents the type of API definition (swagger, apiblueprint)
+	Type string `json:"type,omitempty" yaml:"Type"`
+	// LocationType defines how to find the API definition (url, vcs)
+	LocationType string `json:"locationType,omitempty" yaml:"LocationType"`
+	// VCS defines the API definition as found in a VCS repository
+	VCS `json:"vcs,omitempty" yaml:"VCS"`
+	// URL gives API Definition's location on the web
+	URL string `json:"url,omitempty" yaml:"URL"`
 }
 
-// Required returns a slice required parameters.
-func (ps Parameters) Required() []Parameter {
-	var required []Parameter
-	for _, p := range ps {
-		if p.Required {
-			required = append(required, p)
-		}
-	}
-	return required
-}
-
-// GetParameter by key.
-func (ps Parameters) GetParameter(key string) (Parameter, error) {
-	for _, p := range ps {
-		if p.Key == key {
-			return p, nil
-		}
-	}
-	return Parameter{}, fmt.Errorf("Parameter %v not found", key)
-}
-
-// Parameter defines a single parameter for the service to be called.
-type Parameter struct {
-
-	// Key: The string key representing the parameter.
-	Key string `json:"key" yaml:"Key"`
-
-	// Description: A human readable description of the parameter.
-	Description string `json:"description" yaml:"Description"`
-
-	// Required: If the value is required for the API call.
-	Required bool `json:"required,omitempty" yaml:"Required"`
-
-	// Type: The type of parameter.  This will be used to identify the
-	// location of the parameter in the http.Request.
-	Type string `json:"type" yaml:"Type"`
-
-	// Position: A string value representiing a position.  This is relative
-	// to the Type.
-	Position string `json:"position,omitempty" yaml:"Position"`
-
-	// DataType: A string value that is the key in a map of DataTypes.
-	DataType string `json:"dataType" yaml:"DataType"`
+// VCS holds the information to load an API Definition from a VCS repository
+type VCS struct {
+	// Location is the VCS endpoint
+	Location string `json:"location,omitempty" yaml:"Location"`
+	// Type is the VCS type (git, hg)
+	Type string `json:"type,omitempty" yaml:"Type"`
+	// File is where to find the definition in relation to the root of the repository
+	File string `json:"file,omitempty" yaml:"File"`
 }
 
 // Configs represents a slice of configs
@@ -220,18 +177,6 @@ type Config struct {
 	Required bool `json:"required,omitempty" yaml:"Required"`
 	// Description: A human readable description of the value.
 	Description string `json:"description" yaml:"Description"`
-}
-
-// Response defines the nature of the response to be returned from this response.
-type Response struct {
-	// Type is a string identifying the structural definition of the response.
-	// The string will reference a value in a map of structural definitions.
-	// This is formatting for the response as a whole.
-	// An example would be http://github.com/jasonrichardsmith/googlejson
-	Type string `json:"type" yaml:"Type"`
-
-	// DataType: A string value that is the key in a map of DataTypes.
-	DataType string `json:"dataType" yaml:"DataType"`
 }
 
 // Flags represents a slice of Flags.
