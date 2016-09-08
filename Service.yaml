@@ -4,20 +4,13 @@ Type: test
 Protocol: http
 Version: "0.1"
 Domain: duckbunny
-Method: POST
-Parameters: 
-  - 
-    DataType: "map[string]string"
-    Description: "My first test parameter"
-    Key: testparam1
-    Required: false
-    Type: json
-  - 
-    DataType: string
-    Description: "My second test parameter"
-    Key: testparam2
-    Required: true
-    Type: header
+APIDefinition:
+    Type: swagger
+    LocationType: vcs
+    VCS:
+        Type: git
+        Location: https://github.com/duckbunny/service.git
+        File: definition.json
 Configs: 
   - 
     Key: testconfig1
@@ -37,9 +30,6 @@ Requires:
     Domain: duckbunny
     Title: service3
     Version: "0.1"
-Response: 
-  DataType: "map[string]string"
-  Type: googlejson
 Flags: 
   - 
     Key: "test"

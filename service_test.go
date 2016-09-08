@@ -29,8 +29,16 @@ func init() {
 		Version:  "0.1",
 		Type:     "test",
 		Protocol: "http",
-		Private:  false,
-		Method:   "POST",
+		APIDefinition: APIDefinition{
+			Type:         "swagger",
+			LocationType: "vcs",
+			VCS: VCS{
+				Location: "https://github.com/duckbunny/service.git",
+				Type:     "git",
+				File:     "definition.json",
+			},
+		},
+		Private: false,
 		Requires: []Service{
 			Service{
 				Title:   "service2",
@@ -41,22 +49,6 @@ func init() {
 				Title:   "service3",
 				Domain:  "duckbunny",
 				Version: "0.1",
-			},
-		},
-		Parameters: []Parameter{
-			Parameter{
-				Key:         "testparam1",
-				Description: "My first test parameter",
-				Required:    false,
-				Type:        "json",
-				DataType:    "map[string]string",
-			},
-			Parameter{
-				Key:         "testparam2",
-				Description: "My second test parameter",
-				Required:    true,
-				Type:        "header",
-				DataType:    "string",
 			},
 		},
 		Configs: []Config{
@@ -70,10 +62,6 @@ func init() {
 				Description: "My second test config",
 				Required:    true,
 			},
-		},
-		Response: Response{
-			Type:     "googlejson",
-			DataType: "map[string]string",
 		},
 		Flags: []Flag{
 			Flag{
@@ -110,7 +98,6 @@ func TestThis(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
 	if !reflect.DeepEqual(s, TestStruct) {
 		t.Error("Test Failed.")
 	}
@@ -150,39 +137,16 @@ func TestToJSON(t *testing.T) {
 }
 
 func TestRequiredKeys(t *testing.T) {
-	keys := TestStruct.Parameters.RequiredKeys()
-	if keys[0] != "testparam2" {
-		t.Error("Test Failed.")
-	}
-	keys = TestStruct.Flags.RequiredKeys()
+	keys := TestStruct.Flags.RequiredKeys()
 	if keys[0] != "test" {
 		t.Error("Test Failed.")
 	}
 }
 
 func TestRequired(t *testing.T) {
-	keys := TestStruct.Parameters.Required()
-	p := keys[0]
-	if p.Key != "testparam2" {
-		t.Error("Test Failed.")
-	}
 	flags := TestStruct.Flags.Required()
 	f := flags[0]
 	if f.Key != "test" {
-		t.Error("Test Failed.")
-	}
-}
-
-func TestGetParameter(t *testing.T) {
-	p, err := TestStruct.Parameters.GetParameter("testparamfake")
-	if err == nil {
-		t.Error("Expected missing parameter.")
-	}
-	p, err = TestStruct.Parameters.GetParameter("testparam1")
-	if err != nil {
-		t.Error("Test Failed.")
-	}
-	if p.Description != "My first test parameter" {
 		t.Error("Test Failed.")
 	}
 }

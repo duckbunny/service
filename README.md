@@ -100,81 +100,6 @@ func (fs Flags) RequiredKeys() []string
 ```
 RequiredKeys returns a slice required flag keys.
 
-#### type Parameter
-
-```go
-type Parameter struct {
-
-	// Key: The string key representing the parameter.
-	Key string `json:"key" yaml:"Key"`
-
-	// Description: A human readable description of the parameter.
-	Description string `json:"description" yaml:"Description"`
-
-	// Required: If the value is required for the API call.
-	Required bool `json:"required,omitempty" yaml:"Required"`
-
-	// Type: The type of parameter.  This will be used to identify the
-	// location of the parameter in the http.Request.
-	Type string `json:"type" yaml:"Type"`
-
-	// Position: A string value representiing a position.  This is relative
-	// to the Type.
-	Position string `json:"position,omitempty" yaml:"Position"`
-
-	// DataType: A string value that is the key in a map of DataTypes.
-	DataType string `json:"dataType" yaml:"DataType"`
-}
-```
-
-Parameter defines a single parameter for the service to be called.
-
-#### type Parameters
-
-```go
-type Parameters []Parameter
-```
-
-Parameters represents a slice of parameters
-
-#### func (Parameters) GetParameter
-
-```go
-func (ps Parameters) GetParameter(key string) (Parameter, error)
-```
-GetParameter by key.
-
-#### func (Parameters) Required
-
-```go
-func (ps Parameters) Required() []Parameter
-```
-Required returns a slice required parameters.
-
-#### func (Parameters) RequiredKeys
-
-```go
-func (ps Parameters) RequiredKeys() []string
-```
-RequiredKeys returns a slice of required parameter keys.
-
-#### type Response
-
-```go
-type Response struct {
-	// Type is a string identifying the structural definition of the response.
-	// The string will reference a value in a map of structural definitions.
-	// This is formatting for the response as a whole.
-	// An example would be http://github.com/jasonrichardsmith/googlejson
-	Type string `json:"type" yaml:"Type"`
-
-	// DataType: A string value that is the key in a map of DataTypes.
-	DataType string `json:"dataType" yaml:"DataType"`
-}
-```
-
-Response defines the nature of the response to be returned from this response.
-
 #### type Service
 
 ```go
@@ -202,17 +127,8 @@ type Service struct {
 	// must contain Title, Domain, and Version.
 	Requires []Service `json:"requires,omitempty" yaml:"Requires"`
 
-	// Parameters: An array of parameters to call this Service.
-	Parameters Parameters `json:"parameters,omitempty" yaml:"Parameters"`
-
 	// Configs: An array of configurations this service can use.
 	Configs Configs `json:"configs,omitempty" yaml:"Configs"`
-
-	// Response: A definition of the response structure for this Service.
-	Response Response `json:"response" yaml:"Response"`
-
-	// Method: Http method used for this Service.
-	Method string `json:"method" yaml:"Method"`
 
 	// Parameters: An array of parameters to call this Service.
 	Flags Flags `json:"flags,omitempty" yaml:"Flags"`
