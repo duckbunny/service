@@ -5,6 +5,7 @@ Is the basic template to define microservices in json and yaml format.
 [![GoDoc](https://godoc.org/github.com/duckbunny/service?status.svg)](https://godoc.org/github.com/duckbunny/service)
 [![Build Status](https://travis-ci.org/duckbunny/service.svg?branch=master)](https://travis-ci.org/duckbunny/service)
 [![Coverage Status](https://coveralls.io/repos/github/duckbunny/service/badge.svg?branch=master)](https://coveralls.io/github/duckbunny/service?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/duckbunny/service)](https://goreportcard.com/report/github.com/duckbunny/service)
 # service
 --
     import "github.com/duckbunny/service"
